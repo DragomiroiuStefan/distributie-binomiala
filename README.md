@@ -7,5 +7,5 @@ Build proiect:
 
 Rulare:
 ```bash
-java -jar distributie-binomiala-1.0-jar-with-dependencies.jar 
+java -jar target/distributie-binomiala-1.0-jar-with-dependencies.jar
 ```
