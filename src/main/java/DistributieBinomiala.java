@@ -6,6 +6,7 @@ import org.knowm.xchart.style.Styler;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,12 +39,15 @@ public class DistributieBinomiala {
     }
 
     /*
-    B(k; n p) = C(n k) * p^k(1 - p)^n-k
+    B(k; n p) = C(n k) * p^k * (1 - p)^n-k
      */
     public static double probabilitateBinomiala(int k, int n, double p) {
         return combinari(n, k).doubleValue() * Math.pow(p, k) * Math.pow(1 - p, n - k);
     }
 
+    /*
+    C(n k) = n! / k! * (n-k)!
+     */
     public static BigInteger combinari(int n, int k) {
         return factorial(n).divide(factorial(k).multiply(factorial(n - k)));
     }
@@ -73,9 +77,14 @@ public class DistributieBinomiala {
     }
 
     public static void main(String[] args) {
-        var coinTosses = generareValoriDistributieBinomiala(9, 0.5, 10000);
-        var zarui = generareValoriDistributieBinomiala(4, 0.166667, 10000);
+        Scanner in = new Scanner(System.in);
+        System.out.println("Generare valori variabila binomiala prin metoda transformatei inverse");
+        System.out.print("n = ");
+        int n = in.nextInt();
+        System.out.print("p = ");
+        double p = in.nextDouble();
 
-        histograma(coinTosses);
+        List<Double> valori = generareValoriDistributieBinomiala(n, p, 10000);
+        histograma(valori);
     }
 }
