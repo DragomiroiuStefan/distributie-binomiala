@@ -12,11 +12,13 @@ import java.util.stream.Stream;
 
 public class DistributieBinomiala {
 
-    public static List<Double> generareValoriDistributieBinomiala(int n, double p, int numarValoriGenerate) {
+    public static final int NUMAR_VALORI_GENERATE = 10000;
+
+    public static List<Double> generareValoriDistributieBinomiala(int n, double p) {
         double[] valoriGenerate = new double[n + 1];
         double[] distributieBinomiala = distributieBinomiala(n, p);
 
-        for (int j = 0; j < numarValoriGenerate; j++) {
+        for (int j = 0; j < NUMAR_VALORI_GENERATE; j++) {
             double random = Math.random();
             double probabilitate = 0.0;
             for (int i = 0; i < distributieBinomiala.length; i++) {
@@ -59,7 +61,7 @@ public class DistributieBinomiala {
         return result;
     }
 
-    public static void histograma(List<Double> distribution)  {
+    public static void histograma(List<Double> distributia, double media, double dispersia)  {
         CategoryChart chart = new CategoryChartBuilder().width(800).height(600)
 //                .title("Distributie Binomiala")
 //                .xAxisTitle("")
@@ -70,10 +72,29 @@ public class DistributieBinomiala {
         chart.getStyler().setAvailableSpaceFill(0.99);
         chart.getStyler().setOverlapped(true);
 
-        var xData = Stream.iterate(0, n -> n + 1).limit(distribution.size()).toList();
-        chart.addSeries("Distributie Binomiala", xData, distribution);
+        var xData = Stream.iterate(0, n -> n + 1).limit(distributia.size()).toList();
+        String seriesName = "Distributie Binomiala\n" +
+                "Media: " + media + "\n" +
+                "Dispersia: " + dispersia + "\n";
+        chart.addSeries(seriesName, xData, distributia);
 
         new SwingWrapper<>(chart).displayChart();
+    }
+
+    public static double media(List<Double> valori) {
+        double media = 0.0;
+        for (int i = 0; i < valori.size(); i++) {
+            media += valori.get(i) * i;
+        }
+        return media/ NUMAR_VALORI_GENERATE;
+    }
+
+    public static double dispersia(List<Double> valori, double media) {
+        double dispersia = 0.0;
+        for (int i = 0; i < valori.size(); i++) {
+            dispersia += valori.get(i) * Math.pow(i, 2);
+        }
+        return dispersia/ NUMAR_VALORI_GENERATE - Math.pow(media, 2);
     }
 
     public static void main(String[] args) {
@@ -84,7 +105,12 @@ public class DistributieBinomiala {
         System.out.print("p = ");
         double p = in.nextDouble();
 
-        List<Double> valori = generareValoriDistributieBinomiala(n, p, 10000);
-        histograma(valori);
+        System.out.println("Media teoretica: " + n * p);
+        System.out.println("Dispersia teoretica" +  n * p * (1-p));
+
+        List<Double> valori = generareValoriDistributieBinomiala(n, p);
+        double media = media(valori);
+        double dispersia = dispersia(valori, media);
+        histograma(valori, media, dispersia);
     }
 }

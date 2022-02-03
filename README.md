@@ -27,3 +27,14 @@ p - probabilitatea de succes
 Probabilitatea de a obtine de k ori cap dupa 3 aruncari de moneda:
 
 ![](./src/main/resources/exemplu-dist-binom.png)
+
+### Media, dispersia si abaterea standard
+
+Media:  
+μ = np
+
+Dispersia:  
+σ^2 = np(1-p)
+
+Abaterea standard:  
+σ = √(np(1-p)) 
