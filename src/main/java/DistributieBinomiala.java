@@ -10,15 +10,16 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Generare variabila binomiala (metoda transformatei inverse)
+ */
 public class DistributieBinomiala {
 
-    public static final int NUMAR_VALORI_GENERATE = 10000;
-
-    public static List<Double> generareValoriDistributieBinomiala(int n, double p) {
+    public static List<Double> generareDistributieBinomiala(int n, double p, int numarValoriGenerate) {
         double[] valoriGenerate = new double[n + 1];
         double[] distributieBinomiala = distributieBinomiala(n, p);
 
-        for (int j = 0; j < NUMAR_VALORI_GENERATE; j++) {
+        for (int j = 0; j < numarValoriGenerate; j++) {
             double random = Math.random();
             double probabilitate = 0.0;
             for (int i = 0; i < distributieBinomiala.length; i++) {
@@ -61,7 +62,7 @@ public class DistributieBinomiala {
         return result;
     }
 
-    public static void histograma(List<Double> distributia, double media, double dispersia)  {
+    public static void histograma(List<Double> distributia, double media, double dispersia) {
         CategoryChart chart = new CategoryChartBuilder().width(800).height(600)
 //                .title("Distributie Binomiala")
 //                .xAxisTitle("")
@@ -81,36 +82,38 @@ public class DistributieBinomiala {
         new SwingWrapper<>(chart).displayChart();
     }
 
-    public static double media(List<Double> valori) {
+    public static double media(List<Double> valori, int numarValoriGenerate) {
         double media = 0.0;
         for (int i = 0; i < valori.size(); i++) {
             media += valori.get(i) * i;
         }
-        return media/ NUMAR_VALORI_GENERATE;
+        return media / numarValoriGenerate;
     }
 
-    public static double dispersia(List<Double> valori, double media) {
+    public static double dispersia(List<Double> valori, double media, int numarValoriGenerate) {
         double dispersia = 0.0;
         for (int i = 0; i < valori.size(); i++) {
             dispersia += valori.get(i) * Math.pow(i, 2);
         }
-        return dispersia/ NUMAR_VALORI_GENERATE - Math.pow(media, 2);
+        return dispersia / numarValoriGenerate - Math.pow(media, 2);
     }
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        System.out.println("Generare valori variabila binomiala prin metoda transformatei inverse");
+        System.out.println("Generare valori variabila binomiala (metoda transformatei inverse)");
         System.out.print("n = ");
         int n = in.nextInt();
         System.out.print("p = ");
         double p = in.nextDouble();
+        System.out.print("Nr. valori generate = ");
+        int numarValoriGenerate = in.nextInt();
 
         System.out.println("Media teoretica: " + n * p);
-        System.out.println("Dispersia teoretica" +  n * p * (1-p));
+        System.out.println("Dispersia teoretica: " + n * p * (1 - p));
 
-        List<Double> valori = generareValoriDistributieBinomiala(n, p);
-        double media = media(valori);
-        double dispersia = dispersia(valori, media);
+        List<Double> valori = generareDistributieBinomiala(n, p, numarValoriGenerate);
+        double media = media(valori, numarValoriGenerate);
+        double dispersia = dispersia(valori, media, numarValoriGenerate);
         histograma(valori, media, dispersia);
     }
 }
